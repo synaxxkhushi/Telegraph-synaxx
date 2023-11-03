@@ -3,7 +3,6 @@ from telegraph import upload_file
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-
 Bot = Client(
     "Telegraph Uploader Bot",
     bot_token=os.environ.get("BOT_TOKEN"),
@@ -13,88 +12,35 @@ Bot = Client(
 
 DOWNLOAD_LOCATION = os.environ.get("DOWNLOAD_LOCATION", "./DOWNLOADS/")
 
-START_TEXT = """Hello {},
-I am an under 5MB media or file to telegra.ph link uploader bot.
+START_CAPTION = """ʜᴇʏ {}, 🥀
+๏ ᴛʜɪs ɪs {} !
 
-Made by @s4n6x"""
+➻ ꜱᴇɴᴅ ᴀɴʏ ʙᴇʟᴏᴡ 5ᴍʙ ᴘʜᴏᴛᴏ/ᴠɪᴅᴇᴏ ᴛᴏ ɢᴇᴛ ᴛᴇʟᴇɢʀᴀᴘʜ ʟɪɴᴋ 
 
-HELP_TEXT = """**About Me**
+──────────────────
+๏ ᴛʜᴀɴᴋꜱ ʙʏ 💞 @Privates_RoBot
 
-- Just give me a media under 5MB
-- Then I will download it
-- I will then upload it to the telegra.ph link
-"""
-
-ABOUT_TEXT = """**About Me**
-
-- **Bot :** `Telegraph Uploader`
-- **Developer :**
-  • [Update](https://telegram.me/synaxnetwork)
-  • [Telegram](https://telegram.me/s4n6x)
-- **Language :** [Python3](https://python.org)
-- **Library :** [Pyrogram](https://pyrogram.org)"""
+──────────────────
+๏ ⚔️ ᴘᴏᴡᴇʀ ʙʏ @Prime_Rolex"""
 
 START_BUTTONS = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton('Feedback', url='https://telegram.me/coder_s4nax')
-        ],
-        [
-            InlineKeyboardButton('Help', callback_data='help'),
-            InlineKeyboardButton('About', callback_data='about'),
-            InlineKeyboardButton('Close', callback_data='close')
+            InlineKeyboardButton('✨ 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 𝙲𝙷𝙰𝙽𝙽𝙴𝙻', url='https://telegram.me/Privates_RoBot')
         ]
     ]
 )
-
-HELP_BUTTONS = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton('Home', callback_data='home'),
-            InlineKeyboardButton('About', callback_data='about'),
-            InlineKeyboardButton('Close', callback_data='close')
-        ]
-    ]
-)
-
-ABOUT_BUTTONS = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton('Home', callback_data='home'),
-            InlineKeyboardButton('Help', callback_data='help'),
-            InlineKeyboardButton('Close', callback_data='close')
-        ]
-    ]
-)
-
 
 @Bot.on_callback_query()
 async def cb_data(bot, update):
-    
     if update.data == "home":
         await update.message.edit_text(
-            text=START_TEXT.format(update.from_user.mention),
+            text=START_CAPTION,
             disable_web_page_preview=True,
             reply_markup=START_BUTTONS
         )
-    
-    elif update.data == "help":
-        await update.message.edit_text(
-            text=HELP_TEXT,
-            disable_web_page_preview=True,
-            reply_markup=HELP_BUTTONS
-        )
-    
-    elif update.data == "about":
-        await update.message.edit_text(
-            text=ABOUT_TEXT,
-            disable_web_page_preview=True,
-            reply_markup=ABOUT_BUTTONS
-        )
-    
     else:
         await update.message.delete()
-    
 
 @Bot.on_message(filters.private & filters.command(["start"]))
 async def start(bot, update):
@@ -106,15 +52,12 @@ async def start(bot, update):
         reply_markup=START_BUTTONS
     )
 
-
 @Bot.on_message(filters.private & filters.media)
 async def getmedia(bot, update):
-    
     medianame = DOWNLOAD_LOCATION + str(update.from_user.id)
-    
     try:
         message = await update.reply_text(
-            text="`Processing...`",
+            text="ᴘʀᴏᴄᴇꜱꜱɪɴɢ...",
             quote=True,
             disable_web_page_preview=True
         )
@@ -138,25 +81,19 @@ async def getmedia(bot, update):
             reply_markup=reply_markup
         )
         return
-    
-    text=f"**Link :-** `https://telegra.ph{response[0]}`\n\n**Join :-** @synaxnetwork"
+    text=f"Link :- https://telegra.ph{response[0]}\n\nJoin :- @Privates_RoBot"
     reply_markup=InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="Open Link", url=f"https://telegra.ph{response[0]}"),
-                InlineKeyboardButton(text="Share Link", url=f"https://telegram.me/share/url?url=https://telegra.ph{response[0]}")
-            ],
-            [
-                InlineKeyboardButton(text="Join Updates Channel", url="https://telegram.me/synaxnetwork")
+                InlineKeyboardButton(text="ᴏᴘᴇɴ ʟɪɴᴋ 🛡️", url=f"https://telegra.ph{response[0]}"),
+                InlineKeyboardButton(text="ꜱʜᴇʀᴇ ʟɪɴᴋ 🗡️", url=f"https://telegram.me/share/url?url=https://telegra.ph{response[0]}")
             ]
         ]
     )
-    
     await message.edit_text(
         text=text,
         disable_web_page_preview=True,
         reply_markup=reply_markup
     )
-
 
 Bot.run()
